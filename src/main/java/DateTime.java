@@ -16,5 +16,7 @@ public class DateTime {
 	  System.out.println(date);
 	  //printing date
 	  System.out.println("Current Date: " + ft.format(date));
+	  
+	  //commit 3
 	}
 }
