@@ -5,9 +5,9 @@ public class DateTime {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-	/*	Date date= new Date();
-  System.out.println(date.toString());
-	} */
+	// /*	Date date= new Date();
+  //System.out.println(date.toString());
+	//} */
 	
 	Date date = new Date();
 	   //printing date and time
@@ -24,7 +24,6 @@ public class DateTime {
 	  //commit 5
 	  
 	  //commit 10
-	  
-	  //commit 11
 	}
 }
+

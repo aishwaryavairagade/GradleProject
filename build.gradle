@@ -1,20 +1,21 @@
 
+
 apply plugin: 'java'
 apply plugin: 'eclipse'
-// In this section you declare where to find the dependencies of your project
+apply plugin: 'application'
 
-group = 'default'
-version = '1.0-SNAPSHOT'
+mainClassName = 'DateTime'
+
 
 repositories {
-    // Use 'jcenter' for resolving your dependencies.
-    // You can declare any Maven/Ivy/file repository here.
-    jcenter()
+    mavenCentral()
 }
 
-
-// In this section you declare the dependencies for your production and test code
+jar {
+    manifest {
+        attributes 'Main-Class': 'DateTime'
+    }
+    }
 dependencies {
-    // The production code uses the SLF4J logging API at compile time
-  
+    testCompile 'junit:junit:4.12'
 }
