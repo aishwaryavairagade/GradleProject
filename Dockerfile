@@ -1,18 +1,12 @@
-FROM ubuntu:trusty
+FROM ubuntu:latest
 
 RUN apt-get update
-RUN apt-get -y upgrade
+RUN apt-get install -y python python-pip wget
+RUN pip install Flask
 
- 
-RUN apt-get install -y default-jre
-RUN apt-get install -y default-jdk
- 
- WORKDIR /src
- ADD / /src
- 
- RUN java -jar GradleProject.jar
- 
- CMD  java -jar GradleProject.jar
+ADD hello.py /home/hello.py
+
+WORKDIR /home
 
 
 
