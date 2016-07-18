@@ -1,26 +1,20 @@
-#
-# Oracle Java 8 Dockerfile
-#
-# https://github.com/dockerfile/java
-# https://github.com/dockerfile/java/tree/master/oracle-java8
-#
+FROM ubuntu:trusty
 
-# Pull base image.
-FROM ubuntu:latest
+RUN apt-get update
+RUN apt-get -y upgrade
 
-# Install Java.
 RUN \
-  echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | debconf-set-selections && \
-  apt-get install -y oracle-java7-installer && \
-  rm -rf /var/lib/apt/lists/* && \
-  rm -rf /var/cache/oracle-jdk8-installer
 
+    apt-get install -y  software-properties-common && \
+    add-apt-repository ppa:webupd8team/java -y && \
+    apt-get update && \
+    echo oracle-java7-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections && \
+    apt-get install -y oracle-java8-installer && \
+    apt-get clean
 
-# Define working directory.
-WORKDIR /data
+WORKDIR /src
+ADD / /src
 
-# Define commonly used JAVA_HOME variable
-ENV JAVA_HOME /usr/lib/jvm/java-8-oracle
+RUN java -jar GradleProject.jar
 
-# Define default command.
-CMD ["bash"]
+CMD java -jar GradleProject.jar
