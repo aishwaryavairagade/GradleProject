@@ -1,25 +1,22 @@
-
-
 FROM alpine:3.2
+MAINTAINER Anastas Dancha [...]
 
-MAINTAINER Chen Harel "https://github.com/chook"
-
-# Install dependencies 
-RUN apk --update add curl ca-certificates tar sqlite icu bash && \
+# Install cURL
+RUN apk --update add curl ca-certificates tar && \
     curl -Ls https://circle-artifacts.com/gh/andyshinn/alpine-pkg-glibc/6/artifacts/0/home/ubuntu/alpine-pkg-glibc/packages/x86_64/glibc-2.21-r2.apk > /tmp/glibc-2.21-r2.apk && \
     apk add --allow-untrusted /tmp/glibc-2.21-r2.apk
 
-# Java version
-ENV JAVA_VERSION_MAJOR 7
-ENV JAVA_VERSION_MINOR 79
-ENV JAVA_VERSION_BUILD 15
+# Java Version
+ENV JAVA_VERSION_MAJOR 8
+ENV JAVA_VERSION_MINOR 45
+ENV JAVA_VERSION_BUILD 14
 ENV JAVA_PACKAGE       jdk
 
 # Download and unarchive Java
 RUN mkdir /opt && curl -jksSLH "Cookie: oraclelicense=accept-securebackup-cookie"\
-  http://download.oracle.com/otn-pub/java/jdk/7u79-b15/jdk-7u79-linux-x64.tar.gz \
+  http://download.oracle.com/otn-pub/java/jdk/${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-b${JAVA_VERSION_BUILD}/${JAVA_PACKAGE}-${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-linux-x64.tar.gz \
     | tar -xzf - -C /opt &&\
-    ln -s /opt/jdk1.7.0_79 /opt/jdk &&\
+    ln -s /opt/jdk1.${JAVA_VERSION_MAJOR}.0_${JAVA_VERSION_MINOR} /opt/jdk &&\
     rm -rf /opt/jdk/*src.zip \
            /opt/jdk/lib/missioncontrol \
            /opt/jdk/lib/visualvm \
@@ -39,19 +36,8 @@ RUN mkdir /opt && curl -jksSLH "Cookie: oraclelicense=accept-securebackup-cookie
            /opt/jdk/jre/lib/amd64/libglass.so \
            /opt/jdk/jre/lib/amd64/libgstreamer-lite.so \
            /opt/jdk/jre/lib/amd64/libjavafx*.so \
-           /opt/jdk/jre/lib/amd64/libjfx*.so \
-    && addgroup -g 999 app && adduser -D  -G app -s /bin/false -u 999 app \
-    && rm -rf /tmp/* \
-    && rm -rf /var/cache/apk/* \
-    && echo 'hosts: files mdns4_minimal [NOTFOUND=return] dns mdns4' >> /etc/nsswitch.conf
+           /opt/jdk/jre/lib/amd64/libjfx*.so
 
 # Set environment
 ENV JAVA_HOME /opt/jdk
-ENV PATH ${PATH}:/opt/jdk/bin
-
-WORKDIR /src
-ADD / /src
-
-RUN java -jar GradleProject.jar
-
-CMD java -jar GradleProject.jar
+ENV PATH ${PATH}:${JAVA_HOME}/bin
